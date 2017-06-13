@@ -3,6 +3,7 @@ with (import <nixpkgs> {});
 let 
 
   pythonPackages = python27Packages;
+
   yade-env = pythonPackages.python.buildEnv.override
                   {
                     extraLibs =
@@ -21,42 +22,8 @@ let
                       ];
                   };
 
-in 
 
-  {
-    yade-env = buildEnv
-      {
-        name = "yade-env";
-        paths = 
-          [
-            yade-env
-          ];
-      };
-
-    yade = stdenv.mkDerivation {
-
-      name = "yade";
-
-      buildInputs = [ 
-                 pkgconfig cmake boost.dev python27Packages.boost 
-                 cgal loki python27Full python27Packages.numpy python27Packages.ipython 
-                 eigen3_3 bzip2.dev zlib.dev openblas vtk gmp gmp.dev gts metis 
-                 mpfr mpfr.dev suitesparse glib.dev pcre.dev
-      ];
-
-      src = ./master.tgz;
-
-      enableParallelBuilding = true;
-
-      system = builtins.currentSystem;
-
-      preConfigure = ''
-        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DPY_minieigen=../minieigen/lib"
-      '';
-
-    };
-
-    minieigen = python27Packages.buildPythonPackage rec {
+    minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
 
       src = pkgs.fetchurl {
@@ -64,7 +31,7 @@ in
         sha256 = "71d91f716aeb85e6433696fc0754c32d8f4956f3685d12df925c2c9183a2a108";
       };
 
-      buildInputs = [ unzip python27Packages.boost boost.dev eigen3_3 ];
+      buildInputs = [ unzip pythonPackages.boost boost.dev eigen3_3 ];
 
       patchPhase = ''
         sed -i "s/^.*libraries=libraries.//g" setup.py 
@@ -76,5 +43,49 @@ in
       '';
 
     };
-  }
+
+in 
+
+ {
+
+    yade-env = buildEnv
+      {
+        name = "yade-env";
+        paths = 
+          [
+            yade-env
+          ];
+      };
+
+    minieigen = minieigen;
+
+    yade-daily = stdenv.mkDerivation {
+
+      name = "yade-daily";
+
+      buildInputs = [ 
+                 pkgconfig cmake boost.dev python27Packages.boost 
+                 cgal loki python27Full python27Packages.numpy python27Packages.ipython 
+                 eigen3_3 bzip2.dev zlib.dev openblas vtk gmp gmp.dev gts metis 
+                 mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
+      ];
+
+      src = fetchgit
+      {
+        url = "git://github.com/yade/trunk.git";
+        rev = "52aa595c23bbadea83704bf687f7996acf075a25";
+	sha256 = "09q4g136vrcfc8pd3iviw21ypknaynssx6ibcyjmppaa5a7q2vdx";
+      };
+
+      enableParallelBuilding = true;
+
+      system = builtins.currentSystem;
+
+      preConfigure = ''
+        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=daily"
+      '';
+
+    };
+
+ }
 
