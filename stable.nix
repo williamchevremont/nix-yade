@@ -57,6 +57,7 @@ in
           ];
       };
 
+    minieigen = minieigen;
 
     yade-stable = stdenv.mkDerivation {
 
@@ -69,7 +70,7 @@ in
                  mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
       ];
 
-      src = fetchgit
+      src = fetchurl
       {
         url = "https://launchpad.net/yade/trunk/yade-1.00.0/+download/yade-2017.01a.tar.gz";
 	md5 = "29f83f12f6cdacfd24f1928d90f72906";
