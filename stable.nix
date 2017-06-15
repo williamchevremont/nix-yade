@@ -4,25 +4,6 @@ let
 
   pythonPackages = python27Packages;
 
-  yade-env = pythonPackages.python.buildEnv.override
-                  {
-                    extraLibs =
-                      with pythonPackages;
-                      [
-                        pygments
-                        pexpect
-                        decorator
-                        numpy
-                        ipython
-                        ipython_genutils 
-                        traitlets
-                        enum
-                        six
-                        boost
-                      ];
-                  };
-
-
     minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
 
@@ -48,46 +29,48 @@ in
 
  {
 
-    yade-env = buildEnv
-      {
-        name = "yade-env";
-        paths = 
-          [
-            yade-env
-          ];
-      };
-
     minieigen = minieigen;
 
-    yade-stable = stdenv.mkDerivation {
+    yade-daily = stdenv.mkDerivation rec {
 
-      name = "yade-stable";
+      name = "yade-daily";
+
+      nativeBuildInputs = [pkgconfig cmake makeWrapper python2Packages.wrapPython];
 
       buildInputs = [ 
-                 pkgconfig cmake boost.dev python27Packages.boost 
-                 cgal loki python27Full python27Packages.numpy python27Packages.ipython 
-                 eigen3_3 bzip2.dev zlib.dev openblas vtk gmp gmp.dev gts metis 
-                 mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
+        boost.dev cgal loki python27Full python27Packages.numpy eigen3_3 bzip2.dev zlib.dev 
+        openblas vtk gmp gmp.dev gts metis mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
       ];
+
+      pythonPath = with pythonPackages; [
+                        pygments pexpect decorator numpy
+                        ipython ipython_genutils traitlets
+                        enum six boost minieigen
+                      ];
+
 
       src = fetchurl
       {
         url = "https://launchpad.net/yade/trunk/yade-1.00.0/+download/yade-2017.01a.tar.gz";
-	md5 = "29f83f12f6cdacfd24f1928d90f72906";
+        md5 = "29f83f12f6cdacfd24f1928d90f72906";
       };
+
+      patches = [ ./cmake.patch ];
+
+      postInstall = ''
+        wrapPythonPrograms
+      '';
+
 
       enableParallelBuilding = true;
 
       system = builtins.currentSystem;
 
       preConfigure = ''
-        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=stable"
+        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-2017.01a"
       '';
 
-      patches = [ "./cmake.patch" ];
-
     };
-
 
  }
 
