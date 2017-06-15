@@ -4,25 +4,6 @@ let
 
   pythonPackages = python27Packages;
 
-  yade-env = pythonPackages.python.buildEnv.override
-                  {
-                    extraLibs =
-                      with pythonPackages;
-                      [
-                        pygments
-                        pexpect
-                        decorator
-                        numpy
-                        ipython
-                        ipython_genutils 
-                        traitlets
-                        enum
-                        six
-                        boost
-                      ];
-                  };
-
-
     minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
 
@@ -48,15 +29,6 @@ in
 
  {
 
-    yade-env = buildEnv
-      {
-        name = "yade-env";
-        paths = 
-          [
-            yade-env
-          ];
-      };
-
     minieigen = minieigen;
 
     yade-daily = stdenv.mkDerivation rec {
@@ -66,11 +38,16 @@ in
       nativeBuildInputs = [pkgconfig cmake makeWrapper python2Packages.wrapPython];
 
       buildInputs = [ 
-                 boost.dev python27Packages.boost 
-                 cgal loki python27Full python27Packages.numpy python27Packages.ipython 
-                 eigen3_3 bzip2.dev zlib.dev openblas vtk gmp gmp.dev gts metis 
-                 mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
+        boost.dev cgal loki python27Full python27Packages.numpy eigen3_3 bzip2.dev zlib.dev 
+        openblas vtk gmp gmp.dev gts metis mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
       ];
+
+      pythonPath = with pythonPackages; [
+                        pygments pexpect decorator numpy
+                        ipython ipython_genutils traitlets
+                        enum six boost minieigen
+                      ];
+
 
       src = fetchgit
       {
