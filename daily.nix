@@ -59,12 +59,14 @@ in
 
     minieigen = minieigen;
 
-    yade-daily = stdenv.mkDerivation {
+    yade-daily = stdenv.mkDerivation rec {
 
       name = "yade-daily";
 
+      nativeBuildInputs = [pkgconfig cmake makeWrapper python2Packages.wrapPython];
+
       buildInputs = [ 
-                 pkgconfig cmake boost.dev python27Packages.boost 
+                 boost.dev python27Packages.boost 
                  cgal loki python27Full python27Packages.numpy python27Packages.ipython 
                  eigen3_3 bzip2.dev zlib.dev openblas vtk gmp gmp.dev gts metis 
                  mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
@@ -76,6 +78,11 @@ in
         rev = "52aa595c23bbadea83704bf687f7996acf075a25";
 	sha256 = "09q4g136vrcfc8pd3iviw21ypknaynssx6ibcyjmppaa5a7q2vdx";
       };
+
+      postInstall = ''
+        wrapPythonPrograms
+      '';
+
 
       enableParallelBuilding = true;
 
