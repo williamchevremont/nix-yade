@@ -31,9 +31,10 @@ in
 
     minieigen = minieigen;
 
-    yade-daily = stdenv.mkDerivation rec {
+    yade = stdenv.mkDerivation rec {
 
-      name = "yade-daily";
+      name = "yade-${version}";
+      version = "2017.01a";
 
       nativeBuildInputs = [
         pkgconfig
@@ -102,7 +103,7 @@ in
       system = builtins.currentSystem;
 
       preConfigure = ''
-        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-2017.01a"
+        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-${version}"
       '';
 
     };
