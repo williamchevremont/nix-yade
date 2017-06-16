@@ -87,8 +87,8 @@ in
       src = fetchgit
       {
         url = "https://github.com/yade/trunk.git";
-        rev = "52aa595c23bbadea83704bf687f7996acf075a25";
-	sha256 = "09q4g136vrcfc8pd3iviw21ypknaynssx6ibcyjmppaa5a7q2vdx";
+        rev = "fb2deb04bcdec6334f84104b62abeeb522fdc0b6";
+        sha256 = "0vwmhc1kmn80vp9l0lhdxxsl7m3pi9ldmwhnhjpa9xhq74lsijkr";
       };
 
       postInstall = ''
