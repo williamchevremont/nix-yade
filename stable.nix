@@ -35,19 +35,54 @@ in
 
       name = "yade-daily";
 
-      nativeBuildInputs = [pkgconfig cmake makeWrapper python2Packages.wrapPython];
+      nativeBuildInputs = [
+        pkgconfig
+        cmake
+        makeWrapper
+        python2Packages.wrapPython
+        gmp.dev
+        mpfr.dev
+        bzip2.dev
+        zlib.dev 
+        glib.dev
+        pcre.dev
+        boost.dev
+      ];
 
       buildInputs = [ 
-        boost.dev cgal loki python27Full python27Packages.numpy eigen3_3 bzip2.dev zlib.dev 
-        openblas vtk gmp gmp.dev gts metis mpfr mpfr.dev suitesparse glib.dev pcre.dev minieigen
+        boost
+        cgal
+        loki
+        python27Full
+        python27Packages.numpy
+        eigen3_3
+        bzip2
+        zlib
+        openblas
+        vtk
+        gmp
+        gts
+        metis
+        mpfr
+        suitesparse
+        glib
+        pcre
+        minieigen
       ];
 
       pythonPath = with pythonPackages; [
-                        pygments pexpect decorator numpy
-                        ipython ipython_genutils traitlets
-                        enum six boost minieigen
-                      ];
-
+        pygments
+        pexpect
+        decorator
+        numpy
+        ipython
+        ipython_genutils
+        traitlets
+        enum
+        six
+        boost
+        minieigen
+      ];
 
       src = fetchurl
       {
