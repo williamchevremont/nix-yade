@@ -7,9 +7,11 @@ let
     minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
 
-      src = pkgs.fetchurl {
-        url = "https://github.com/eudoxos/minieigen/archive/master.zip";
-        sha256 = "71d91f716aeb85e6433696fc0754c32d8f4956f3685d12df925c2c9183a2a108";
+      src = pkgs.fetchFromGitHub {
+        owner = "eudoxos";
+        repo = "minieigen";
+        rev = "7bd0a2e823333477a2172b428a3801d9cae0800f";
+        sha256 = "1jksrbbcxshxx8iqpxkc1y0v091hwji9xvz9w963gjpan4jf61wj";
       };
 
       buildInputs = [ unzip pythonPackages.boost boost.dev eigen3_3 ];
@@ -83,6 +85,8 @@ in
         six
         boost
         minieigen
+        pillow
+        matplotlib
       ];
 
       src = fetchurl
