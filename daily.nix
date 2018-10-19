@@ -21,7 +21,7 @@ let
       '';
 
       preConfigure = ''
-        export LDFLAGS="-L${eigen3_3.out}/lib -l boost_python"
+        export LDFLAGS="-L${eigen3_3.out}/lib -lboost_python27"
         export CFLAGS="-I${eigen3_3.out}/include/eigen3"
       '';
 
@@ -32,10 +32,11 @@ in
  {
 
     minieigen = minieigen;
+    boost = boost167;
 
-    yade-daily = stdenv.mkDerivation rec {
+    yadedaily = stdenv.mkDerivation rec {
 
-      name = "yade-daily";
+      name = "yadedaily";
 
       nativeBuildInputs = [
         pkgconfig
@@ -48,7 +49,7 @@ in
         zlib.dev 
         glib.dev
         pcre.dev
-        boost.dev
+        boost167.dev
       ];
 
       buildInputs = [ 
@@ -57,6 +58,8 @@ in
         loki
         python27Full
         python27Packages.numpy
+	python27Packages.matplotlib
+	python27Packages.pillow
         eigen3_3
         bzip2
         zlib
@@ -91,10 +94,13 @@ in
       src = fetchgit
       {
         url = "https://github.com/yade/trunk.git";
-        rev = "fb2deb04bcdec6334f84104b62abeeb522fdc0b6";
-        sha256 = "0vwmhc1kmn80vp9l0lhdxxsl7m3pi9ldmwhnhjpa9xhq74lsijkr";
+        rev = "aa4802e5a60e99a9220381f27c47fbb0e670e26f";
+        sha256 = "13whapqn85k4dlx60pj9gc8fypci8lqk2y57r3ls5y0qkraydz1j";
       };
 
+
+      patches = [ ./cmake.2.patch ];
+	
       postInstall = ''
         wrapPythonPrograms
       '';
@@ -105,7 +111,7 @@ in
       system = builtins.currentSystem;
 
       preConfigure = ''
-        cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=daily"
+        cmakeFlags="--check-system-vars -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=daily -DENABLE_OAR=ON -DENABLE_LINSOLV=OFF -DENABLE_PFVFLOW=OFF -DENABLE_TWOPHASEFLOW=OFF -DCMAKE_CXX_FLAGS=-Wno-int-in-bool-context"
       '';
 
     };
