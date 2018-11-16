@@ -56,6 +56,7 @@ in
         boost
         cgal
         loki
+        openmpi
         python27Full
         python27Packages.numpy
         python27Packages.matplotlib
