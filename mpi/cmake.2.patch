@@ -1,22 +1,20 @@
 --- a/CMakeLists.txt      2018-10-08 13:14:59.892786400 +0200
 +++ b/CMakeLists.txt   2018-10-16 21:51:05.422156100 +0200
-@@ -99,7 +99,9 @@
+@@ -99,7 +99,7 @@
  IF ( NOT LocalBoost )
    SET(LocalBoost "1.47.0") # Minimal required Boost version
  ENDIF ( NOT LocalBoost )
 -FIND_PACKAGE(Boost ${LocalBoost} COMPONENTS python thread filesystem iostreams regex serialization system date_time REQUIRED)
 +FIND_PACKAGE(Boost ${LocalBoost} COMPONENTS thread filesystem iostreams regex serialization system date_time REQUIRED)
-+FIND_PACKAGE(MPI REQUIRED)
  INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
-+INCLUDE_DIRECTORIES (${MPI_INCLUDE_PATH}) 
  # for checking purpose
  MESSAGE("--   Boost_VERSION: " ${Boost_VERSION})
 @@ -576,9 +576,10 @@
  
  ADD_LIBRARY(boot SHARED ${CMAKE_CURRENT_SOURCE_DIR}/core/main/pyboot.cpp)
  SET_TARGET_PROPERTIES(boot PROPERTIES PREFIX "" LINK_FLAGS "-Wl,--as-needed" )
--TARGET_LINK_LIBRARIES(yade ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${LINKLIBS} -lrt)
-+TARGET_LINK_LIBRARIES(yade ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${LINKLIBS} ${MPI_C_LIBRARIES} -lrt -L/nix/store/10qm4bg3xbfy1apclhwy3ka7qk5vbfdw-boost-1.67_0/lib/ -lboost_python27)
+-TARGET_LINK_LIBRARIES(yade ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${LINKLIBS} ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES} -lrt)
++TARGET_LINK_LIBRARIES(yade ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${LINKLIBS} ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES} -lrt -L/nix/store/10qm4bg3xbfy1apclhwy3ka7qk5vbfdw-boost-1.67_0/lib/ -lboost_python27)
  SET_TARGET_PROPERTIES(yade  PROPERTIES LINK_FLAGS "-Wl,--as-needed" )
 -TARGET_LINK_LIBRARIES(boot yade)
 +TARGET_LINK_LIBRARIES(boot yade -lboost_python27)
