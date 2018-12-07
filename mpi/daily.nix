@@ -114,7 +114,7 @@ in
       system = builtins.currentSystem;
 
       preConfigure = ''
-        cmakeFlags="--check-system-vars -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=mpi-daily -DENABLE_OAR=ON -DENABLE_LINSOLV=OFF -DENABLE_PFVFLOW=OFF -DENABLE_TWOPHASEFLOW=OFF -DCMAKE_CXX_FLAGS=-Wno-int-in-bool-context"
+        cmakeFlags="--check-system-vars -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DENABLE_GL=OFF -DSUFFIX=mpi-daily -DENABLE_OAR=ON -DENABLE_LINSOLV=OFF -DENABLE_PFVFLOW=OFF -DENABLE_TWOPHASEFLOW=OFF -DCMAKE_CXX_FLAGS=-Wno-int-in-bool-context"
       '';
 
     };
