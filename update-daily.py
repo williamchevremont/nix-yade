@@ -10,7 +10,7 @@ if debug:
 else:
     stderr = open(os.devnull, 'w')
 
-url="https://github.com/yade/trunk.git"
+url="https://gitlab.com/yade-dev/trunk.git"
 out = check_output(['nix-prefetch-git'] + [url], stderr=stderr)
 data = json.loads(out.decode('utf-8'))
 
