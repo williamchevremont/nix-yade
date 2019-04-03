@@ -93,7 +93,7 @@ in
 
       src = fetchgit
       {
-        url = "https://github.com/yade/trunk.git";
+        url = "https://gitlab.com/yade-dev/trunk.git";
         rev = "aa4802e5a60e99a9220381f27c47fbb0e670e26f";
         sha256 = "13whapqn85k4dlx60pj9gc8fypci8lqk2y57r3ls5y0qkraydz1j";
       };
