@@ -1,30 +1,8 @@
 with (import <nixpkgs> {});
 
-( let
-minieigen = pkgs.python37Packages.buildPythonPackage rec{
-      name = "minieigen";
+{
 
-      src = pkgs.fetchFromGitHub {
-        owner = "eudoxos";
-        repo = "minieigen";
-        rev = "7bd0a2e823333477a2172b428a3801d9cae0800f";
-        sha256 = "1jksrbbcxshxx8iqpxkc1y0v091hwji9xvz9w963gjpan4jf61wj";
-      };
-
-      buildInputs = [ unzip myboost eigen ];
-
-      patchPhase = ''
-        sed -i "s/^.*libraries=libraries.//g" setup.py 
-      '';
-
-      preConfigure = ''
-        export LDFLAGS="-L${eigen.out}/lib -lboost_python37"
-        export CFLAGS="-I${eigen.out}/include/eigen3"
-      '';
-
-};
-
- myboost = stdenv.mkDerivation rec {
+ boost = stdenv.mkDerivation rec {
   name = "boost-1.71";
 
   buildInputs = [
@@ -34,7 +12,7 @@ minieigen = pkgs.python37Packages.buildPythonPackage rec{
    xz
    icu
    zstd
-  ];
+   ];
 
 
   src = fetchgit {
@@ -67,19 +45,4 @@ minieigen = pkgs.python37Packages.buildPythonPackage rec{
     maintainers = with maintainers; [ ivan-tkatchev ];
   };
 };
-
-
-in 
-
-{ yade-env = pkgs.python37.buildEnv.override rec{
-
-        extraLibs = with pkgs.python37Packages;[
-                        pygments mpi4py pexpect decorator numpy
-                        ipython ipython_genutils traitlets
-                        six minieigen ipython future matplotlib
-                      ] ;
-        ignoreCollisions = true;
-
-    };
 }
-)
